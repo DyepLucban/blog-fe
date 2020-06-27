@@ -21,7 +21,7 @@
                     </v-btn>
 
                     <v-btn color="green darken-1" text @click="DeleteBtn">
-                        Delete it
+                        Delete
                     </v-btn>
 
                 </v-card-actions>

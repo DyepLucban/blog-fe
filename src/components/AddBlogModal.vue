@@ -21,7 +21,7 @@
                                 <v-textarea v-model="input.content" label="Content" required></v-textarea>
                             </v-col>
                             <v-col cols="12">
-                                <v-file-input label="Photo"></v-file-input>
+                                <input type="file" @change="changeImage">
                             </v-col>                        
                         </v-row>
                     </v-container>
@@ -47,7 +47,7 @@ export default {
         input: {
             title: '',
             content: '',
-            // image: null,            
+            image: null,            
         },
     }),
     
@@ -55,13 +55,23 @@ export default {
 
         ...mapActions('blog', ['addNewBlog']),
 
+        changeImage(e) 
+        {
+            let fileReader = new FileReader();
+
+            fileReader.readAsDataURL(e.target.files[0])
+
+            fileReader.onload = (e) => {
+                this.input.image = e.target.result
+            }
+        },        
+
         async create() {
             let res = await this.addNewBlog(this.input)
-
+            
             if (res.status == 200)
             {
                 await this.$store.dispatch('blog/getAllBlogs')
-                this.input = ''
                 this.dialog = false
             }
         }

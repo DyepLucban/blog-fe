@@ -5,7 +5,7 @@
             <v-img
             class="white--text align-end"
             height="200px"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            :src="blog.image"
             > <!-- IMAGE HERE -->
             <v-card-title>{{ blog.title }}</v-card-title>
             </v-img>
