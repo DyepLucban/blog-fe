@@ -21,8 +21,7 @@
                                 <v-textarea label="Content" required v-model="blogItem.content"></v-textarea>
                             </v-col>
                             <v-col cols="12">
-                                <label for="">Photo</label>
-                                <v-file-input></v-file-input>
+                                <input type="file" @change="changeImage">
                             </v-col>                        
                         </v-row>
                     </v-container>
@@ -65,8 +64,18 @@ export default {
     methods: {
         ...mapActions('blog', ['updateBlog']),
 
-        async update() {
+        changeImage(e) 
+        {
+            let fileReader = new FileReader();
 
+            fileReader.readAsDataURL(e.target.files[0])
+
+            fileReader.onload = (e) => {
+                this.blogItem.image = e.target.result
+            }
+        }, 
+
+        async update() {
             let res = await this.updateBlog(this.blogItem)
             
             if (res.status == 200)

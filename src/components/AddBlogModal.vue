@@ -72,6 +72,7 @@ export default {
             if (res.status == 200)
             {
                 await this.$store.dispatch('blog/getAllBlogs')
+                this.input = ''
                 this.dialog = false
             }
         }
