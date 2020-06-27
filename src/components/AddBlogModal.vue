@@ -1,31 +1,38 @@
 <template>
     <div>
-        <v-card>
-            <v-card-title>
-                <span class="headline">Add New Blog</span>
-            </v-card-title>
+        <v-dialog v-model="dialog" persistent max-width="700">
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn dark v-bind="attrs" v-on="on" icon>
+                    <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+            </template>
+            <v-card>
+                <v-card-title>
+                    <span class="headline">Add New Blog</span>
+                </v-card-title>
 
-            <v-card-text>
-                <v-container>
-                    <v-row>
-                        <v-col cols="12">
-                            <v-text-field v-model="title" label="Title"></v-text-field>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-textarea v-model="content" label="Content" required></v-textarea>
-                        </v-col>
-                        <v-col cols="12">
-                            <v-file-input v-model="file" label="Photo"></v-file-input>
-                        </v-col>                        
-                    </v-row>
-                </v-container>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
-                <v-btn color="blue darken-1" text >Add</v-btn>
-            </v-card-actions>
-        </v-card>
+                <v-card-text>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field v-model="input.title" label="Title"></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-textarea v-model="input.content" label="Content" required></v-textarea>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-file-input label="Photo"></v-file-input>
+                            </v-col>                        
+                        </v-row>
+                    </v-container>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="create">Add</v-btn>
+                </v-card-actions>
+            </v-card>            
+        </v-dialog>
     </div>
 </template>
 
@@ -37,18 +44,27 @@ export default {
 
     data: () => ({
         dialog: false,
-        title: '',
-        content: '',
-        file: [],
+        input: {
+            title: '',
+            content: '',
+            // image: null,            
+        },
     }),
-
+    
     methods: {
 
-        test() {
-            alert(111);
-        },
+        ...mapActions('blog', ['addNewBlog']),
 
-        ...mapActions('blog', ['addNewBlog'])
+        async create() {
+            let res = await this.addNewBlog(this.input)
+
+            if (res.status == 200)
+            {
+                await this.$store.dispatch('blog/getAllBlogs')
+                this.input = ''
+                this.dialog = false
+            }
+        }
     },
     
 }

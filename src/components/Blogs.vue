@@ -17,20 +17,8 @@
             </v-card-text>
 
             <v-card-actions>
-                
-                <v-dialog v-model="dialog" persistent max-width="700">
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="orange" v-bind="attrs" v-on="on" text >
-                            Edit
-                        </v-btn>
-                    </template>
-                    <UpdateModal></UpdateModal>
-                </v-dialog>
-
-
-                <v-btn color="orange" text>
-                    Delete
-                </v-btn>
+                <UpdateModal :blog-item="blog"/>
+                <DeleteModal :blog-item="blog"/>
             </v-card-actions>
         </v-card>
     </div>
@@ -39,6 +27,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import UpdateModal from './EditBlogModal';
+import DeleteModal from './DeleteBlogModal';
 
 
 export default {
@@ -46,12 +35,13 @@ export default {
 
     data () {
         return {
-            dialog: false,
+
         }
     },
     
     components: {
         UpdateModal,
+        DeleteModal,
     },
 
     async mounted() {
@@ -63,7 +53,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('blog', ['getAllBlogs', 'getSpecificBlog']),
+        ...mapActions('blog', ['getAllBlogs']),
     },
 
 

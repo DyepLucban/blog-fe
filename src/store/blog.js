@@ -3,11 +3,13 @@ import { getField, updateField } from 'vuex-map-fields'
 
 const state = {
     blogs: [],
+    deleted_blogs: [],
 }
 
 const getters = {
     getField,
     blogs: (state) => state.blogs,
+    deleted_blogs: (state) => state.deleted_blogs,
 }
 
 const actions = {
@@ -16,13 +18,30 @@ const actions = {
         commit('onOkAllBlogs', response.data);
     },
 
-    async getSpecificBlog(payload) {
-        let response = await Api.getSpecificBlog();
-        console.log(response.data, payload)
+    async getAllDeletedBlogs({commit}) {
+        let response = await Api.getAllDeletedBlogs()
+        commit('onOkDeletedBlogs', response.data);
     },
 
-    async addNewBlog() {
-        alert(11)
+    async addNewBlog({}, params) {
+        return await Api.createNewBlog(params)
+    },
+
+    async updateBlog({}, params) {
+        return await Api.updateSpecificBlog(params)
+    },
+
+    async deleteBlog({}, params) {
+        return await Api.deleteSpecificBlog(params)
+    },
+
+    async restoreDeleteBlog({}, id) {
+        return await Api.restoreSpecificBlog(id)
+    },
+
+    async searchBlog({commit}, params) {
+        let response = await Api.searchBlog(params)
+        commit('onOkAllBlogs', response.data);
     },
 }
 
@@ -31,6 +50,10 @@ const mutations = {
     onOkAllBlogs(state, data) {
         state.blogs = data.data
     },
+    onOkDeletedBlogs(state, data) {
+        state.deleted_blogs = data.data
+    },
+
 
 }
 
