@@ -15,10 +15,10 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field v-model="input.title" label="Title"></v-text-field>
+                                <v-text-field :v-if="error.message.title" :error-messages="error.message.title" v-model="input.title" label="Title"></v-text-field>
                             </v-col>
-                            <v-col cols="12">
-                                <v-textarea v-model="input.content" label="Content" required></v-textarea>
+                            <v-col cols="12"> 
+                                <v-textarea :v-if="error.message.content" :error-messages="error.message.content" v-model="input.content" label="Content" required></v-textarea>
                             </v-col>
                             <v-col cols="12">
                                 <input type="file" @change="changeImage">
@@ -28,7 +28,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                     <v-btn color="blue darken-1" text @click="create">Add</v-btn>
                 </v-card-actions>
             </v-card>            
@@ -49,12 +49,19 @@ export default {
             content: '',
             image: null,            
         },
+        error: {
+            status: false,
+            message: []
+        },
     }),
     
     methods: {
 
         ...mapActions('blog', ['addNewBlog']),
-
+        close() {
+            this.dialog = false
+            this.input = ''
+        },
         changeImage(e) 
         {
             let fileReader = new FileReader();
@@ -69,12 +76,15 @@ export default {
         async create() {
             let res = await this.addNewBlog(this.input)
             
-            if (res.status == 200)
+            if (res.code == 200)
             {
                 await this.$store.dispatch('blog/getAllBlogs')
                 this.input = ''
                 this.dialog = false
             }
+
+            this.error.status = true;
+            this.error.message = res.data.message;
         }
     },
     

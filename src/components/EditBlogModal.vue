@@ -15,10 +15,10 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field label="Title" v-model="blogItem.title"></v-text-field>
+                                <v-text-field :v-if="error.message.title" :error-messages="error.message.title" label="Title" v-model="blogItem.title"></v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-textarea label="Content" required v-model="blogItem.content"></v-textarea>
+                                <v-textarea :v-if="error.message.title" :error-messages="error.message.content" label="Content" required v-model="blogItem.content"></v-textarea>
                             </v-col>
                             <v-col cols="12">
                                 <input type="file" @change="changeImage">
@@ -55,6 +55,10 @@ export default {
             updated_title: '',
             updated_content: '',
         },
+        error: {
+            status: false,
+            message: []
+        },
     }),
 
     async mounted() {
@@ -78,11 +82,13 @@ export default {
         async update() {
             let res = await this.updateBlog(this.blogItem)
             
-            if (res.status == 200)
+            if (res.data.code == 200)
             {
                 await this.$store.dispatch('blog/getAllBlogs')
                 this.updateDialog = false
             }
+
+            this.error.message = res.data.message 
         }
     }
 }
