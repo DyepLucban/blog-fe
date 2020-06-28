@@ -58,6 +58,7 @@ export default {
     methods: { 
 
         ...mapActions('blog', ['addNewBlog']),
+        
         close() {
             this.dialog = false
             this.input = ''
