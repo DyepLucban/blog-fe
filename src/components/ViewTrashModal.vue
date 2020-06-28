@@ -21,7 +21,7 @@
                 </v-btn>
 
                 </v-toolbar>
-                <v-list v-if="deleted_blogs.length != 0">
+                <v-list v-if="deleted_blogs.length > 0">
                     <v-list-item v-for="(items, k) in deleted_blogs" :key="k">
                         <v-list-item-icon>
                             <v-btn @click="restore(items.id)">
