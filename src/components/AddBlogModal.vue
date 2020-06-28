@@ -55,13 +55,14 @@ export default {
         },
     }),
     
-    methods: {
+    methods: { 
 
         ...mapActions('blog', ['addNewBlog']),
         close() {
             this.dialog = false
             this.input = ''
         },
+        
         changeImage(e) 
         {
             let fileReader = new FileReader();
