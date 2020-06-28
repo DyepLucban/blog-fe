@@ -61,8 +61,9 @@ export default {
         close() {
             this.dialog = false
             this.input = ''
+            this.error.status = false
         },
-        
+
         changeImage(e) 
         {
             let fileReader = new FileReader();
